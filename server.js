@@ -68,6 +68,10 @@ var server = http.createServer(function(req, res){
                     }
                 });
         }
+        else
+        {
+            return err400();
+        }
     }
     console.log(">> Not an API call!");
     if(u.pathname == '/')

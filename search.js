@@ -7,7 +7,7 @@ var Search = function(s)
 Search.prototype = {
     addBook: function(book)
     {
-        this.books.push(book);
+        this.books.push(this.api.books[book.isbn]);
     },
     list: function()
     {
