@@ -8,6 +8,7 @@ var finder = function(Search){
 finder.prototype = {
     search: function(s, callback){
             var i;
+            s.callback(this.connectors.length, callback);
             for(i in this.connectors)
             {
                 this.connectors[i].search(s);

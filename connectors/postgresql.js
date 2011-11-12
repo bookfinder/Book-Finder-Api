@@ -12,4 +12,4 @@ Postgres.prototype = {
     }
 };
 
-module.exports = Postgres;
+module.exports = 0;//Postgres;

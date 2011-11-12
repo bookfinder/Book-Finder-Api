@@ -21,7 +21,8 @@ Search.prototype = {
     end: function()
     {
         this.nbConnector--;
-        if(this.nbConnector === 0)
+        console.log('Search complete ? '+this.nbConnector);
+        if(this.nbConnector == 0)
             this.callback();
     }
     

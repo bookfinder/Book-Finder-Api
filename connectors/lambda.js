@@ -8,6 +8,7 @@ var Lambda = function(api, Book)
 Lambda.prototype = {
     search: function(search)
     {
+        console.log(search);
         // query == search.s
         var book = new this.Book('9782070612369', "Harry Potter a L'ecole des sorciers");
         book.author = "JOANNE KATHLEEN ROWLING";
@@ -16,7 +17,7 @@ Lambda.prototype = {
                 {name: 'Amazon', price: 5.50, distance: 5.7}
             ];
         
-        api.addBook(book);
+        this.api.addBook(book);
         search.addBook(book);
         search.end();
     }

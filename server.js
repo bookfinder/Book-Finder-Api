@@ -25,31 +25,33 @@ var server = http.createServer(function(req, res){
     console.log('>>> Request on '+u.pathname);
     if(u.pathname.substr(0, 4) == '/api')
     {
+        console.log(u);
         var err400 = function()
         {
             res.writeHead(400, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({success: true, msg: 'Bad request format'}));
         };
         // serve api call
-        if(!u.query) return err400();
+        if(typeof u.query == 'undefined') return err400();
         var query = querystring.parse(u.query);
-        if(u.pathname.substr(4, 6) == 'search')
+        console.log(u.pathname.substr(4, 6));
+        if(u.pathname.substr(5, 6) == 'search')
         {
-            console.log("\t>> Search!");
-            if(!query.s) return err400();
-            var oSearch = new Search(s);
-            api.search(oSearch, function(err)
+            console.log(">> Search!");
+            if(typeof query.s == 'undefined') return err400();
+            var oSearch = new Search(query.s);
+            return api.search(oSearch, function(err)
             {
                 var list = oSearch.list();
                 res.writeHead(200, {'Content-Type': 'application/json'});
                 res.end(JSON.stringify({success: false, total: list.length, result: list}));
             });
         }
-        else if(u.pathname.substr(4, 3) == 'get')
+        else if(u.pathname.substr(5, 3) == 'get')
         {
             if(typeof query.isbn == 'undefined')
                 return err400();
-            api.get(query.isbn, function(err, book){
+            return api.get(query.isbn, function(err, book){
                     if(err)
                     {
                         res.writeHead(404, {'Content-Type': 'application/json'});
@@ -84,3 +86,5 @@ var server = http.createServer(function(req, res){
     });
 }).listen(process.env.PORT);
 
+
+setTimeout(function(){ process.exit(); }, 60000);
