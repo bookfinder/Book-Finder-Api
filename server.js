@@ -12,7 +12,8 @@ var connectors = fs.readdirSync(path.join(__dirname, 'connectors'));
 var connector, i;
 for(i in connectors)
 {
-    connector = require(connectors[i]);
+    //console.log(path.join(__dirname, 'connectors', connectors[i]));
+    connector = require(path.join(__dirname, 'connectors', connectors[i]));
     if(typeof connector != 'undefined')
     {
         api.addConnector(connector);
@@ -21,24 +22,27 @@ for(i in connectors)
 
 var server = http.createServer(function(req, res){
     var u = url.parse(req.url);
+    console.log('>>> Request on '+u.pathname);
     if(u.pathname.substr(0, 4) == '/api')
     {
         var err400 = function()
         {
             res.writeHead(400, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({err: true, msg: 'Bad request format'}));
+            res.end(JSON.stringify({success: true, msg: 'Bad request format'}));
         };
         // serve api call
         if(!u.query) return err400();
         var query = querystring.parse(u.query);
         if(u.pathname.substr(4, 6) == 'search')
         {
+            console.log("\t>> Search!");
             if(!query.s) return err400();
             var oSearch = new Search(s);
             api.search(oSearch, function(err)
             {
+                var list = oSearch.list();
                 res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify({err: false, books: oSearch.list()));
+                res.end(JSON.stringify({success: false, total: list.length, result: list}));
             });
         }
         else if(u.pathname.substr(4, 3) == 'get')
@@ -49,17 +53,17 @@ var server = http.createServer(function(req, res){
                     if(err)
                     {
                         res.writeHead(404, {'Content-Type': 'application/json'});
-                        res.end(JSON.stringify({err: true, msg: "Can't find book!"}));
+                        res.end(JSON.stringify({success: true, msg: "Can't find book!"}));
                     }
                     else
                     {
                         res.writeHead(200, {'Content-Type': 'application/json'});
-                        res.end(JSON.stringify({err: false, book: book}));
+                        res.end(JSON.stringify({success: false, book: book}));
                     }
                 });
         }
     }
-    
+    console.log("\t>> Not an API call!");
     if(u.pathname == '/')
         u.pathname = '/index.html';
     var file, f = path.join(__dirname, 'public', u.pathname);
@@ -78,5 +82,5 @@ var server = http.createServer(function(req, res){
             file.pipe(res);
         }
     });
-});
+}).listen(process.env.PORT);
 

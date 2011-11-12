@@ -7,7 +7,11 @@ var finder = function(Search){
 
 finder.prototype = {
     search: function(s, callback){
-            
+            var i;
+            for(i in this.connectors)
+            {
+                this.connectors[i].search(s);
+            }
         },
     
     getList: function(isbns){
@@ -22,7 +26,12 @@ finder.prototype = {
         
     },
     addConnector: function(connector){
-        this.connectors.push(new connector());
+        if(typeof connector == 'function')
+        {
+            var oConnect = new connector(this, finder.Book);
+            this.connectors.push(oConnect);
+            console.log(oConnect.name);
+        }
     }
     
 };
