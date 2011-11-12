@@ -1,4 +1,4 @@
-var http = require('http'),
+var http    = require('http'),
     url     = require('url'),
     querystring = require('querystring'),
     path    = require('path'),
@@ -20,6 +20,8 @@ for(i in connectors)
     }
 }
 
+var jsonType = 'application/json';
+
 var server = http.createServer(function(req, res){
     var u = url.parse(req.url);
     console.log('>>> Request on '+u.pathname);
@@ -28,8 +30,8 @@ var server = http.createServer(function(req, res){
         console.log(u);
         var err400 = function()
         {
-            res.writeHead(400, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({success: true, msg: 'Bad request format'}));
+            res.writeHead(400, {'Content-Type': jsonType});
+            res.end(JSON.stringify({success: false, msg: 'Bad request format'}));
         };
         // serve api call
         if(typeof u.query == 'undefined') return err400();
@@ -43,8 +45,10 @@ var server = http.createServer(function(req, res){
             return api.search(oSearch, function(err)
             {
                 var list = oSearch.list();
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify({success: false, total: list.length, result: list}));
+                res.writeHead(200, {'Content-Type': jsonType});
+                var ret = JSON.stringify({success: true, total: list.length, results: list});
+                console.log(ret);
+                res.end(ret);
             });
         }
         else if(u.pathname.substr(5, 3) == 'get')
@@ -54,18 +58,18 @@ var server = http.createServer(function(req, res){
             return api.get(query.isbn, function(err, book){
                     if(err)
                     {
-                        res.writeHead(404, {'Content-Type': 'application/json'});
-                        res.end(JSON.stringify({success: true, msg: "Can't find book!"}));
+                        res.writeHead(404, {'Content-Type': jsonType});
+                        res.end(JSON.stringify({success: false, msg: "Can't find book!"}));
                     }
                     else
                     {
-                        res.writeHead(200, {'Content-Type': 'application/json'});
-                        res.end(JSON.stringify({success: false, book: book}));
+                        res.writeHead(200, {'Content-Type': jsonType});
+                        res.end(JSON.stringify({success: true, book: book}));
                     }
                 });
         }
     }
-    console.log("\t>> Not an API call!");
+    console.log(">> Not an API call!");
     if(u.pathname == '/')
         u.pathname = '/index.html';
     var file, f = path.join(__dirname, 'public', u.pathname);
@@ -87,4 +91,4 @@ var server = http.createServer(function(req, res){
 }).listen(process.env.PORT);
 
 
-setTimeout(function(){ process.exit(); }, 60000);
+setTimeout(function(){ process.exit(); }, 600000);

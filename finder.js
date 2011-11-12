@@ -24,7 +24,23 @@ finder.prototype = {
         },
         
     addBook: function(book){
-        
+        if(typeof this.books[book.isbn] != 'Book')
+        {
+            this.books[book.isbn] = book;
+        }
+        else
+        {
+            var i;
+            for(i in book)
+            {
+                if(i == 'locations')
+                {
+                    this.books[book.isbn][i] = this.books[book.isbn][i].concat(book[i]);
+                }
+                else if(typeof this.books[book.isbn][i] == 'undefined')
+                    this.books[book.isbn][i] = book[i];
+            }
+        }
     },
     addConnector: function(connector){
         if(typeof connector == 'function')
