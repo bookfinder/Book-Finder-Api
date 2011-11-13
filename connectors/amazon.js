@@ -1,4 +1,5 @@
-var OperationHelper = require('apac').OperationHelper;
+var OperationHelper = require('apac').OperationHelper,
+    util = require('util');
 
 var opHelper = new OperationHelper({
     awsId:     'AKIAJJ5CVPEGNZ4VUPMA',
@@ -22,7 +23,7 @@ Amazon.prototype = {
         }, function(error, results) {
             if (error) { console.log('Erro : '+error); }
             else
-                console.log(results);
+                console.log(results.Items);
         });
         /*
         // query == search.s
