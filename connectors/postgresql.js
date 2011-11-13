@@ -12,14 +12,16 @@ Postgres.prototype = {
   {
     var self = this;
     
+    //var conString = "tcp://username:password@hotname/database";
     var conString = "tcp://postgres:postgres@localhost/bookfinder";
-
+    
     //error handling omitted
     pg.connect(conString, function(err, client) {
       
-      var sql = "SELECT * FROM documents WHERE title like '%toto%' OR subject like '%toto%'";
+      var sql = "select * from documents where (title_tsv || subject_tsv) @@ to_tsquery($1)";
+      var params = [search.s];
       
-      client.query(sql, function(err, result) {
+      client.query(sql, params, function(err, result) {
         console.log("Row count: %d",result.rows.length);
         
         for(var i=0; i < result.rows.length ; i++){
