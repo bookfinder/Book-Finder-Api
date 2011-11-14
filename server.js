@@ -10,12 +10,10 @@ var http    = require('http'),
 var api = new finder(Search);
 var connectors = fs.readdirSync(path.join(__dirname, 'connectors'));
 var connector, i;
-for(i in connectors)
-{
-    //console.log(path.join(__dirname, 'connectors', connectors[i]));
+for(i in connectors) {
+    if (connectors[i].substr(-4) == '.swp') { continue; }
     connector = require(path.join(__dirname, 'connectors', connectors[i]));
-    if(typeof connector != 'undefined')
-    {
+    if(typeof connector != 'undefined') {
         api.addConnector(connector);
     }
 }

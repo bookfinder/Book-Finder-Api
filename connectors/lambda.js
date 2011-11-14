@@ -19,8 +19,8 @@ Lambda.prototype = {
                 {name: 'Saint-Albert', price: 24.95, distance: 4.3}
             ];
         
-        this.api.addBook(book);
-        search.addBook(book);
+        //this.api.addBook(book);
+        //search.addBook(book);
         
         // book fake
         book = new this.Book('9782070612376', "Harry Potter et la chambre des secrets");
@@ -30,8 +30,8 @@ Lambda.prototype = {
                 {name: 'Saint-Albert', price: 24.95, distance: 4.3}
             ];
         
-        this.api.addBook(book);
-        search.addBook(book);
+        //this.api.addBook(book);
+        //search.addBook(book);
         
         // book fake
         book = new this.Book('9782070541300', "Harry Potter et le Prisonnier d'Azkaban");
@@ -41,8 +41,8 @@ Lambda.prototype = {
                 {name: 'Saint-Albert', price: 24.95, distance: 4.3}
             ];
         
-        this.api.addBook(book);
-        search.addBook(book);
+        //this.api.addBook(book);
+        //search.addBook(book);
         
         // book fake
         book = new this.Book('9782070543588', "Harry Potter et la Coupe de feu");
@@ -52,19 +52,19 @@ Lambda.prototype = {
                 {name: 'Saint-Albert', price: 24.95, distance: 4.3}
             ];
         
-        this.api.addBook(book);
-        search.addBook(book);
+        //this.api.addBook(book);
+        //search.addBook(book);
         
         // book fake
-        book = new this.Book('9782070556854', "Harry Potter et l'Ordre du phénix");
+        book = new this.Book('9782070556854', "Harry Potter et l'Ordre du phenix");
         book.author = "JOANNE KATHLEEN ROWLING";
         book.year = "2003";
         book.locations = [
                 {name: 'Saint-Albert', price: 24.95, distance: 4.3}
             ];
         
-        this.api.addBook(book);
-        search.addBook(book);
+        //this.api.addBook(book);
+        //search.addBook(book);
         search.end();
     }
 };

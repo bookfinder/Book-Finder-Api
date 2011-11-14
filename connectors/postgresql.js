@@ -1,31 +1,30 @@
-var pg = require('pg');
+var pg       = require('pg');
+var settings = require('../settings');
 
-var Postgres = function(api, Book)
-{
+var Postgres = function(api, Book) {
   this.name = 'Postgres';
   this.api = api;
   this.Book = Book;
 };
 
 Postgres.prototype = {
-  search: function(search)
-  {
+  search: function(search) {
     var self = this;
-    
-    var conString = "tcp://postgres:postgres@localhost/bookfinder";
+
+    var conString = 'tcp://'+settings.PG_USER+':'+settings.PG_PASSW+'@'+settings.PG_HOST+'/'+settings.PG_DATABASE;
 
     //error handling omitted
     pg.connect(conString, function(err, client) {
+      var sql = "select * from documents d, authors a where (d.title_tsv || d.subject_tsv) @@ plainto_tsquery($1) and a.id = d.author_id";
+      var params = [search.s];
       
-      var sql = "SELECT * FROM documents WHERE title like '%toto%' OR subject like '%toto%'";
-      
-      client.query(sql, function(err, result) {
+      client.query(sql, params, function(err, result) {
         console.log("Row count: %d",result.rows.length);
         
         for(var i=0; i < result.rows.length ; i++){
-          var book = new self.Book(result.rows[0].isbn, result.rows[0].title);
-          book.year = result.rows[0].years;
-          book.author = "UN AUTEUR"; //TODO
+          var book = new self.Book(result.rows[i].isbn, result.rows[i].title);
+          book.year = (result.rows[i].years != null) ? result.rows[i].years : "";
+          book.author = (result.rows[i].author != null) ? result.rows[i].author : "";
           book.locations = [
           {
             name: 'St-Albert',
@@ -37,9 +36,9 @@ Postgres.prototype = {
           self.api.addBook(book);
           search.addBook(book);
         }
+        search.end();
       });
     });
-    search.end();
   }
 };
 
