@@ -1,16 +1,5 @@
 var pg       = require('pg');
-
-var conString;
-if(process.env.HOST == 'heroku')
-{
-  conString = process.env.DATABASE_URL;
-}
-else
-{
-  var settings = require('../settings').pg;
-  conString = 'tcp://'+settings.PG_USER+':'+settings.PG_PASSW+'@'+settings.PG_HOST+'/'+settings.PG_DATABASE;
-}
-
+var conString = require('../settings').pg.url;
 
 var Postgres = function(api, Book) {
   this.name = 'Postgres';

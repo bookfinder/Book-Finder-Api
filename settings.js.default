@@ -1,9 +1,6 @@
 var Settings = {
   pg:   {
-    PG_USER     : 'postgres',
-    PG_PASSW    : 'postgres',
-    PG_HOST     : 'localhost',
-    PG_DATABASE : 'bookfinder'
+    url   : 'postgres'
   },
   amazon: {
     awsId     : '', // your AWS API key
