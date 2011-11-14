@@ -15,10 +15,6 @@ finder.prototype = {
                 this.connectors[i].search(s);
             }
         },
-    
-    getList: function(isbns){
-            
-        },
         
     get: function(isbn, callback){
             if(typeof this.books[isbn] == 'undefined')
@@ -58,7 +54,7 @@ finder.prototype = {
         {
             var oConnect = new connector(this, finder.Book);
             this.connectors.push(oConnect);
-            console.log(oConnect.name);
+            console.log(' > New connector : 'oConnect.name);
         }
     }
     

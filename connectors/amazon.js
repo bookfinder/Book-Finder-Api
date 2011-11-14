@@ -2,9 +2,9 @@ var OperationHelper = require('apac').OperationHelper,
     util = require('util');
 
 var opHelper = new OperationHelper({
-    awsId:     'AKIAJJ5CVPEGNZ4VUPMA',
-    awsSecret: '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',
-    assocId:   ''
+    awsId:     'AKIAJTG5ZGYFNR7GNQUA',
+    awsSecret: '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',
+    assocId:   'bookfinde-20'
 });
 var Amazon = function(api, Book)
 {
@@ -23,7 +23,7 @@ Amazon.prototype = {
         }, function(error, results) {
             if (error) { console.log('Erro : '+error); }
             else
-                console.log(results.Items);
+                console.log(results.Items.Item);
         });
         /*
         // query == search.s

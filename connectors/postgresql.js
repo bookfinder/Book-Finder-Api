@@ -43,4 +43,4 @@ Postgres.prototype = {
   }
 };
 
-module.exports = Postgres;
+//module.exports = Postgres;
