@@ -1,5 +1,5 @@
 var pg       = require('pg');
-var settings = require('../settings');
+var settings = require('../settings').pg;
 
 var Postgres = function(api, Book) {
   this.name = 'Postgres';

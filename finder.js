@@ -50,12 +50,8 @@ finder.prototype = {
         }
     },
     addConnector: function(connector){
-        if(typeof connector == 'function')
-        {
-            var oConnect = new connector(this, finder.Book);
-            this.connectors.push(oConnect);
-            console.log(' > New connector : 'oConnect.name);
-        }
+      var oConnect = new connector(this, finder.Book);
+      this.connectors.push(oConnect);
     }
     
 };

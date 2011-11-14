@@ -1,0 +1,9 @@
+{
+  "name": "bookfinder-api",
+  "version": "0.1.0",
+  "dependencies": {
+    "pg": "0.6.6",
+    "apac": "0.0.4",
+    "mime": "1.2.4"
+  }
+}
