@@ -1,23 +1,22 @@
-var pg = require('pg');
+var pg       = require('pg');
+var settings = require('../settings');
 
-var Postgres = function(api, Book)
-{
+var Postgres = function(api, Book) {
   this.name = 'Postgres';
   this.api = api;
   this.Book = Book;
 };
 
 Postgres.prototype = {
-  search: function(search)
-  {
+  search: function(search) {
     var self = this;
     
-    var conString = "tcp://postgres:postgres@localhost/bookfinder";
+    var conString = 'tcp://'+settings.PG_USER+':'+settings.PG_PASSW+'@'+settings.PG_HOST+'/'+settings.PG_DATABASE;
 
     //error handling omitted
     pg.connect(conString, function(err, client) {
       
-      var sql = "SELECT * FROM documents WHERE title like '%toto%' OR subject like '%toto%'";
+      var sql = "SELECT * FROM documents WHERE title like '%homme%' OR subject like '%homme%'";
       
       client.query(sql, function(err, result) {
         console.log("Row count: %d",result.rows.length);
@@ -37,9 +36,9 @@ Postgres.prototype = {
           self.api.addBook(book);
           search.addBook(book);
         }
+        search.end();
       });
     });
-    search.end();
   }
 };
 
