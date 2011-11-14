@@ -56,7 +56,7 @@ Lambda.prototype = {
         search.addBook(book);
         
         // book fake
-        book = new this.Book('9782070556854', "Harry Potter et l'Ordre du phénix");
+        book = new this.Book('9782070556854', "Harry Potter et l'Ordre du phenix");
         book.author = "JOANNE KATHLEEN ROWLING";
         book.year = "2003";
         book.locations = [

@@ -25,8 +25,8 @@ Postgres.prototype = {
         console.log("Row count: %d",result.rows.length);
         
         for(var i=0; i < result.rows.length ; i++){
-          var book = new self.Book(result.rows[0].isbn, result.rows[0].title);
-          book.year = result.rows[0].years;
+          var book = new self.Book(result.rows[i].isbn, result.rows[i].title);
+          book.year = result.rows[i].years;
           book.author = "UN AUTEUR"; //TODO
           book.locations = [
           {
@@ -39,9 +39,10 @@ Postgres.prototype = {
           self.api.addBook(book);
           search.addBook(book);
         }
+        
+        search.end();
       });
     });
-    search.end();
   }
 };
 
