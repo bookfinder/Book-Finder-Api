@@ -10,20 +10,20 @@ var Postgres = function(api, Book) {
 Postgres.prototype = {
   search: function(search) {
     var self = this;
-    
+
     var conString = 'tcp://'+settings.PG_USER+':'+settings.PG_PASSW+'@'+settings.PG_HOST+'/'+settings.PG_DATABASE;
 
     //error handling omitted
     pg.connect(conString, function(err, client) {
+      var sql = "select * from documents where (title_tsv || subject_tsv) @@ to_tsquery($1)";
+      var params = [search.s];
       
-      var sql = "SELECT * FROM documents WHERE title like '%homme%' OR subject like '%homme%'";
-      
-      client.query(sql, function(err, result) {
+      client.query(sql, params, function(err, result) {
         console.log("Row count: %d",result.rows.length);
         
         for(var i=0; i < result.rows.length ; i++){
-          var book = new self.Book(result.rows[0].isbn, result.rows[0].title);
-          book.year = result.rows[0].years;
+          var book = new self.Book(result.rows[i].isbn, result.rows[i].title);
+          book.year = result.rows[i].years;
           book.author = "UN AUTEUR"; //TODO
           book.locations = [
           {

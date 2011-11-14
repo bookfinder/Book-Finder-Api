@@ -8,6 +8,7 @@ var finder = function(Search){
 finder.prototype = {
     search: function(s, callback){
             var i;
+            s.api = this;
             s.callback(this.connectors.length, callback);
             for(i in this.connectors)
             {
@@ -20,7 +21,17 @@ finder.prototype = {
         },
         
     get: function(isbn, callback){
-            
+            if(typeof this.books[isbn] == 'undefined')
+            {
+                var oSearch = new this.Search(isbn);
+                this.search(oSearch, function(err)
+                {
+                    var books = oSearch.list();
+                    callback(err, books[0]);
+                });
+            }
+            else
+                callback(false, this.books[isbn]);
         },
         
     addBook: function(book){
@@ -59,16 +70,6 @@ finder.Book = function(isbn, title)
     this.isbn = isbn;
     this.title = title;
     this.locations = [];
-};
-
-finder.Connector = function(){
-    };
-
-finder.Connector.prototype = {
-    search: function(s)
-    {
-        
-    }
 };
 
 module.exports = finder;

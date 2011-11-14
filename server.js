@@ -19,6 +19,7 @@ for(i in connectors) {
 }
 
 var jsonType = 'application/json';
+var headers = {'Content-Type': jsonType, 'Access-Control-Allow-Origin': '*'};
 
 var server = http.createServer(function(req, res){
     var u = url.parse(req.url);
@@ -28,7 +29,7 @@ var server = http.createServer(function(req, res){
         console.log(u);
         var err400 = function()
         {
-            res.writeHead(400, {'Content-Type': jsonType});
+            res.writeHead(400, headers);
             res.end(JSON.stringify({success: false, msg: 'Bad request format'}));
         };
         // serve api call
@@ -43,7 +44,7 @@ var server = http.createServer(function(req, res){
             return api.search(oSearch, function(err)
             {
                 var list = oSearch.list();
-                res.writeHead(200, {'Content-Type': jsonType});
+                res.writeHead(200, headers);
                 var ret = JSON.stringify({success: true, total: list.length, results: list});
                 console.log(ret);
                 res.end(ret);
@@ -56,15 +57,19 @@ var server = http.createServer(function(req, res){
             return api.get(query.isbn, function(err, book){
                     if(err)
                     {
-                        res.writeHead(404, {'Content-Type': jsonType});
+                        res.writeHead(404, headers);
                         res.end(JSON.stringify({success: false, msg: "Can't find book!"}));
                     }
                     else
                     {
-                        res.writeHead(200, {'Content-Type': jsonType});
+                        res.writeHead(200, headers);
                         res.end(JSON.stringify({success: true, book: book}));
                     }
                 });
+        }
+        else
+        {
+            return err400();
         }
     }
     console.log(">> Not an API call!");
