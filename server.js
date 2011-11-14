@@ -1,3 +1,17 @@
+/**
+ * Author: @jeansebtr
+ * Date: 12 november 2011
+ */
+
+// load first for a cute CLI :)
+var color   = require('./libs/colors.js'); // colors.js alter global String class
+console.log(' >>> '.green+'Starting '+'BookFinder-Api'.green.underline+' on '+'Nodejs'.green.bold+' '+process.version);
+
+var prod = (process.env.NODE_ENV == 'production');
+
+// load libs
+var lbl = 'Loading libs';
+console.time(lbl);
 var http    = require('http'),
     url     = require('url'),
     querystring = require('querystring'),
@@ -6,18 +20,29 @@ var http    = require('http'),
     mime    = require('mime'),
     finder  = require('./finder.js'),
     Search  = require('./search.js');
+console.timeEnd(lbl);
 
 var api = new finder(Search);
 var connectors = fs.readdirSync(path.join(__dirname, 'connectors'));
 var connector, i;
-for(i in connectors) {
-    if (connectors[i].substr(-4) == '.swp') { continue; }
-    connector = require(path.join(__dirname, 'connectors', connectors[i]));
-    if(typeof connector != 'undefined') {
-        api.addConnector(connector);
-    }
+console.time('Loading ALL connectors : '+'COMPLETED '.green);
+for(i in connectors)
+{
+  lbl = 'Loading connector '+connectors[i].magenta;
+  console.time(lbl);
+  connector = require(path.join(__dirname, 'connectors', connectors[i]));
+  if(typeof connector == 'function')
+  {
+    api.addConnector(connector);
+    console.timeEnd(lbl);
+  }
+  else
+  {
+    console.timeEnd(lbl);
+    console.log('   ...   '+connectors[i].magenta+' connector '+'disabled!'.cyan);
+  }
 }
-
+console.timeEnd('Loading ALL connectors : '+'COMPLETED '.green);
 var jsonType = 'application/json';
 var headers = {'Content-Type': jsonType, 'Access-Control-Allow-Origin': '*'};
 
@@ -93,5 +118,6 @@ var server = http.createServer(function(req, res){
     });
 }).listen(process.env.PORT);
 
-
-setTimeout(function(){ process.exit(); }, 600000);
+// Cloud9ide seem to crash with long running debug..
+if(typeof process.env.C9_SELECTED_FILE != 'undefined')
+  setTimeout(function(){ process.exit(); }, 600000);
