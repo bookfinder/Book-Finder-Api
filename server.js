@@ -91,7 +91,7 @@ var server = http.createServer(function(req, res){
             file.pipe(res);
         }
     });
-}).listen(3000);
+}).listen(process.env.PORT);
 
 
 setTimeout(function(){ process.exit(); }, 600000);
