@@ -16,10 +16,14 @@ Postgres.prototype = {
     //error handling omitted
     pg.connect(conString, function(err, client) {
       var sql = "select * from documents where (title_tsv || subject_tsv) @@ to_tsquery($1)";
+
+      // TODO: This should not be there at all.
+      search.s = search.s.split(' ');
+
       var params = [search.s];
       
       client.query(sql, params, function(err, result) {
-        console.log("Row count: %d",result.rows.length);
+        console.log("Row count: %d", result.rows.length);
         
         for(var i=0; i < result.rows.length ; i++){
           var book = new self.Book(result.rows[i].isbn, result.rows[i].title);
