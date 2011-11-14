@@ -1,5 +1,16 @@
 var pg       = require('pg');
-var settings = require('../settings').pg;
+
+var conString;
+if(process.env.HOST == 'heroku')
+{
+  conString = process.env.DATABASE_URL;
+}
+else
+{
+  var settings = require('../settings').pg;
+  conString = 'tcp://'+settings.PG_USER+':'+settings.PG_PASSW+'@'+settings.PG_HOST+'/'+settings.PG_DATABASE;
+}
+
 
 var Postgres = function(api, Book) {
   this.name = 'Postgres';
@@ -10,8 +21,6 @@ var Postgres = function(api, Book) {
 Postgres.prototype = {
   search: function(search) {
     var self = this;
-
-    var conString = 'tcp://'+settings.PG_USER+':'+settings.PG_PASSW+'@'+settings.PG_HOST+'/'+settings.PG_DATABASE;
 
     //error handling omitted
     pg.connect(conString, function(err, client) {

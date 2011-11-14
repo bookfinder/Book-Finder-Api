@@ -2,10 +2,12 @@
  * Author: @jeansebtr
  * Date: 12 november 2011
  */
-console.dir(process.env);
+
 // load first for a cute CLI :)
 var color   = require('./libs/colors.js'); // colors.js alter global String class
 console.log(' >>> '.green+'Starting '+'BookFinder-Api'.green.underline+' on '+'Nodejs'.green.bold+' '+process.version);
+
+var prod = (process.env.NODE_ENV == 'production');
 
 // load libs
 var lbl = 'Loading libs';
@@ -116,5 +118,6 @@ var server = http.createServer(function(req, res){
     });
 }).listen(process.env.PORT);
 
-
-setTimeout(function(){ process.exit(); }, 600000);
+// Cloud9ide seem to crash with long running debug..
+if(typeof process.env.C9_SELECTED_FILE != 'undefined')
+  setTimeout(function(){ process.exit(); }, 600000);
