@@ -15,7 +15,7 @@ Postgres.prototype = {
 
     //error handling omitted
     pg.connect(conString, function(err, client) {
-      var sql = "select * from documents where (title_tsv || subject_tsv) @@ plainto_tsquery($1)";
+      var sql = "select * from documents d, authors a where (d.title_tsv || d.subject_tsv) @@ plainto_tsquery($1) and a.id = d.author_id";
       var params = [search.s];
       
       client.query(sql, params, function(err, result) {
@@ -23,8 +23,8 @@ Postgres.prototype = {
         
         for(var i=0; i < result.rows.length ; i++){
           var book = new self.Book(result.rows[i].isbn, result.rows[i].title);
-          book.year = result.rows[i].years;
-          book.author = "UN AUTEUR"; //TODO
+          book.year = (result.rows[i].years != null) ? result.rows[i].years : "";
+          book.author = (result.rows[i].author != null) ? result.rows[i].author : "";
           book.locations = [
           {
             name: 'St-Albert',
