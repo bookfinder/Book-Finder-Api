@@ -18,7 +18,7 @@ Postgres.prototype = {
     //error handling omitted
     pg.connect(conString, function(err, client) {
       
-      var sql = "select * from documents where (title_tsv || subject_tsv) @@ to_tsquery($1)";
+      var sql = "select * from documents where (title_tsv || subject_tsv) @@ plainto_tsquery($1)";
       var params = [search.s];
       
       client.query(sql, params, function(err, result) {
