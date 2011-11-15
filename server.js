@@ -46,7 +46,6 @@ for(i in connectors)
 console.timeEnd('Loading ALL connectors : '+'COMPLETED '.green);
 
 
-console.time('Starting Web server ... '+'DONE '.green);
 var headers = Config.headers;
 headers['Content-Type'] = 'application/json';
 
@@ -104,7 +103,7 @@ var server = http.createServer(function(req, res){
     // An API call would have returned here, serve static files
     if(u.pathname == '/')
         u.pathname = '/index.html';
-    var file, f = path.join(__dirname, 'public', u.pathname);
+    var file, f = path.join(__dirname, 'public/public', u.pathname);
     path.exists(f, function(exists){
         if(exists)
         {
@@ -121,9 +120,17 @@ var server = http.createServer(function(req, res){
         }
     });
 }).listen(process.env.PORT, function(){
-    console.timeEnd('Starting Web server ... '+'DONE '.green);
+    console.log('Starting Web server on port '+(process.env.PORT+'').cyan+' ... '+'DONE '.green);
   });
 
 // Cloud9ide seem to crash with long running debug..
 if(typeof process.env.C9_SELECTED_FILE != 'undefined')
-  setTimeout(function(){ process.exit(); }, 600000);
+  setTimeout(function(){ console.warn('WARNING! '.red+'Stoping server..'); process.exit(); }, 600000);
+
+setInterval(function(){
+  console.log(' ... '+'heartbeat'.green+' ... ');
+  }, 15000);
+
+process.on('exit', function () {
+  console.log(' >>> Server shutting down... ');
+});

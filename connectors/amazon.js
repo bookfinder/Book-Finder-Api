@@ -19,6 +19,7 @@ else
   Amazon.prototype = {
       search: function(search)
       {
+        console.log('Amazon search : '+search.s);
           opHelper.execute('ItemSearch', {
               'SearchIndex': 'Books',
               'Keywords': search.s,
@@ -26,7 +27,7 @@ else
           }, function(error, results) {
               if (error) { console.log('Erro : '+error); }
               else
-                  console.log(results.Items.Item);
+                  console.dir(results);
           });
           /*
           // query == search.s
