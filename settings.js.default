@@ -6,6 +6,9 @@ var Settings = {
     awsId     : '', // your AWS API key
     awsSecret : '', // api secret
     assocId   : ''  // associate tag
+  },
+  headers: { // additionnal headers
+    
   }
 }
 module.exports = Settings;

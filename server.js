@@ -19,7 +19,8 @@ var http    = require('http'),
     fs      = require('fs'),
     mime    = require('mime'),
     finder  = require('./finder.js'),
-    Search  = require('./search.js');
+    Search  = require('./search.js'),
+    Config  = require('./settings.js');
 console.timeEnd(lbl);
 
 var api = new finder(Search);
@@ -43,15 +44,17 @@ for(i in connectors)
   }
 }
 console.timeEnd('Loading ALL connectors : '+'COMPLETED '.green);
-var jsonType = 'application/json';
-var headers = {'Content-Type': jsonType, 'Access-Control-Allow-Origin': '*'};
+
+
+console.time('Starting Web server ... '+'DONE '.green);
+var headers = Config.headers;
+headers['Content-Type'] = 'application/json';
 
 var server = http.createServer(function(req, res){
     var u = url.parse(req.url);
-    console.log('>>> Request on '+u.pathname);
+    console.log('>>> Request on '+u.pathname.cyan);
     if(u.pathname.substr(0, 4) == '/api')
     {
-        console.log(u);
         var err400 = function()
         {
             res.writeHead(400, headers);
@@ -97,7 +100,8 @@ var server = http.createServer(function(req, res){
             return err400();
         }
     }
-    console.log(">> Not an API call!");
+    
+    // An API call would have returned here, serve static files
     if(u.pathname == '/')
         u.pathname = '/index.html';
     var file, f = path.join(__dirname, 'public', u.pathname);
@@ -116,7 +120,9 @@ var server = http.createServer(function(req, res){
             file.pipe(res);
         }
     });
-}).listen(process.env.PORT);
+}).listen(process.env.PORT, function(){
+    console.timeEnd('Starting Web server ... '+'DONE '.green);
+  });
 
 // Cloud9ide seem to crash with long running debug..
 if(typeof process.env.C9_SELECTED_FILE != 'undefined')
